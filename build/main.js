@@ -5,6 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const body_parser_1 = __importDefault(require("body-parser"));
+const ft_parse_1 = require("./ft-parse");
 // Create a new express app instance
 const app = express_1.default();
 app.use(body_parser_1.default.urlencoded({ extended: true }));
@@ -27,3 +28,5 @@ router.route('/symbol/:symbol').get((req, res) => {
     res.json(15.666);
 });
 app.listen(port, function () { console.log("App is listening on port " + port + "!"); });
+let parser = new ft_parse_1.FtParser();
+parser.parse();

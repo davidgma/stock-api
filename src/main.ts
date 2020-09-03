@@ -1,5 +1,6 @@
 import express from 'express';
 import bodyparser from 'body-parser';
+import { FtParser } from './ft-parse';
 
 // Create a new express app instance
 const app: express.Application = express();
@@ -27,3 +28,7 @@ router.route('/symbol/:symbol').get((req, res) => {
 
 
 app.listen(port, function () { console.log("App is listening on port " + port + "!"); });
+
+let parser = new FtParser();
+parser.parse();
+
