@@ -1,0 +1,10 @@
+#!/bin/bash
+echo This compiles, but does not run, the program.
+tsc -p ./src/
+
+# Create the run script
+name="run"
+echo "#!/bin/bash" > $name
+echo $(which node) $(pwd)/build/main.js "--open-with \$3 --working-directory \$2 \$1" >> $name
+
+chmod a+x $name 

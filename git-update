@@ -1,0 +1,16 @@
+#!/bin/bash
+# The command to update git
+
+if [ $# -gt 0 ]; then
+	message=$*
+else
+	message="Upload changes."
+fi
+
+echo $message
+
+# Send to github
+git add *
+git commit -a -m "${message}"
+git push
+
