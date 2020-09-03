@@ -9,7 +9,7 @@ const body_parser_1 = __importDefault(require("body-parser"));
 const app = express_1.default();
 app.use(body_parser_1.default.urlencoded({ extended: true }));
 app.use(body_parser_1.default.json());
-let port = process.env.PORT || 8080;
+let port = process.env.PORT || 4221;
 const router = express_1.default.Router();
 router.get('/', function (req, res) {
     console.log(req.params);

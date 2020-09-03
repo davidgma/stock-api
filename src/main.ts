@@ -6,7 +6,7 @@ const app: express.Application = express();
 
 app.use(bodyparser.urlencoded({ extended: true }));
 app.use(bodyparser.json());
-let port = process.env.PORT || 8080;
+let port = process.env.PORT || 4221;
 const router = express.Router();
 router.get('/', function (req, res) {
     console.log(req.params);
