@@ -1,6 +1,6 @@
 import { get } from 'https';
 import {stringify} from 'querystring';
-import { parse as htmlParse } from 'node-html-parser';
+import { parse as htmlParse, HTMLElement as parsedElement } from 'node-html-parser';
 
 export class FtParser {
 
@@ -20,8 +20,8 @@ export class FtParser {
               content += chunk;
             });
             res.on('end', () => {
-                const root = htmlParse(content);
-                let quoteBar = root.querySelector('.mod-tearsheet-overview__quote__bar');
+                const root: parsedElement = htmlParse(content);
+                let quoteBar: parsedElement = root.querySelector('.mod-tearsheet-overview__quote__bar');
                 let priceElement = quoteBar.querySelector(".mod-ui-data-list__value").innerHTML;
                 console.log("Search: " + priceElement);
               console.log('No more data in response.');

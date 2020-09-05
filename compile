@@ -2,9 +2,17 @@
 echo This compiles, but does not run, the program.
 tsc -p ./src/
 
-# Create the run script
-name="run"
-echo "#!/bin/bash" > $name
-echo $(which node) $(pwd)/build/main.js "--open-with \$3 --working-directory \$2 \$1" >> $name
+# Create the run script for the server
+name1="1run-server"
+echo "#!/bin/bash" > $name1
+echo $(which node) $(pwd)/build/server.js '$@' >> $name1
 
-chmod a+x $name 
+chmod a+x $name1 
+
+# Create the run script for the control program
+name2="2run-control"
+echo "#!/bin/bash" > $name2
+echo $(which node) $(pwd)/build/control.js '$@' >> $name2
+
+chmod a+x $name2 
+
