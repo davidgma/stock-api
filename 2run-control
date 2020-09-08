@@ -1,2 +1,2 @@
 #!/bin/bash
-/home/david/.nvm/versions/node/v12.18.0/bin/node /home/david/local/dev/stock-api/build/control.js $@
+/usr/bin/node /home/david/local/dev/stock-api/build/control.js $@
