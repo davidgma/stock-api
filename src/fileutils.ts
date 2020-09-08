@@ -2,7 +2,7 @@
 // import os = require('os');
 // import exec = require('child_process');
 // import tmp = require('tmp');
-import { stat, readFile, writeFile, unlink, realpath } from 'fs';
+import { stat, readFile, writeFile, unlink, realpath, mkdir } from 'fs';
 import { EOL } from 'os';
 import { ChildProcess, spawn } from 'child_process';
 import { file } from 'tmp';
@@ -35,6 +35,53 @@ export class FileUtils {
                 }
             });
         });
+    }
+
+    // use: if (! await flu.mkDir(path)) {
+    static mkDir(path: string): Promise<number> {
+        return new Promise<number>((resolve, reject) => {
+            if (path == null) {
+                console.log("Error: null path sent to mkDir.");
+                resolve(-1);
+            };
+            stat(path, (err, stats) => {
+                if (err) {
+                    if (err.code === "ENOENT") {
+                        // Ok: might not yet exist
+                    }
+                    else {
+                        console.log("Error trying to stat path '" + path + " " + err.name
+                            + ", " + err.code + ", " + err.message);
+                        resolve(-2);
+                    }
+                }
+                if (stats !== undefined) {
+                    if (stats.isFile()) {
+                        console.log("Error: Path sent to mkDir is already file.");
+                        resolve(-3);
+                    }
+                    else if (stats.isDirectory()) {
+                        // Already exists
+                        resolve(1);
+                    }
+                }
+                else {
+                    console.log("Creating the directory '" + path + "'")
+                    mkdir(path, { recursive: true }, (err, path) => {
+                        if (err) {
+                            console.log("Error trying to create directory '"
+                                + path + " " + err.name
+                                + ", " + err.code + ", " + err.message);
+                            resolve(-4);
+                        }
+                        else {
+                            resolve(0);
+                        }
+                    });
+                }
+            });
+        });
+
     }
 
     static async fullPath(path: string): Promise<string> {
