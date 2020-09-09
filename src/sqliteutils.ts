@@ -14,10 +14,6 @@ export class SqliteUtils {
         this._variables = new Map<string, string>();
     }
 
-    hello() {
-        console.log("Hello world from sqliteutils.");
-    }
-
     public async process_file(): Promise<number> {
         console.log("current dir: " + FileUtils.currentDirectory());
         // check that the filename exists
