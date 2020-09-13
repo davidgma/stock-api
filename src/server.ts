@@ -25,12 +25,13 @@ router.use(function (req, res, next) {
 router.route('/symbol/:symbol').get((req, res) => {
     console.log(req.params);
     console.log("symbol = " + req.params.symbol);
-    res.json(15.666);
+    let parser = new FtParser();
+    res.json(parser.getPrice(req.params.symbol));
+    //res.json(15.666);
 });
 
 
 app.listen(port, function () { console.log("App is listening on port " + port + "!"); });
 
-let parser = new FtParser();
-parser.parse();
+
 

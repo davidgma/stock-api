@@ -3,16 +3,11 @@
 // this operates on one database whereas SqliteUtils sends files to sqlite3
 // which contain the name of the database to operate on. 
 
-/*
-Todo: Set up the add command in control.ts to get the price from the ft and
-then add it to the database.
-*/
-
 import { FileUtils as flu } from './fileutils';
 import { sep } from 'path';
 import { exec } from 'child_process';
 
-class DatabaseService {
+export class DatabaseService {
     #db_name: string;
     #db_directory: string;
     #db_ready: Promise<boolean>;
@@ -73,6 +68,7 @@ class DatabaseService {
     // Use double quotes "" in the sql sent and terminate with a ;.
     public async sendSql(sql: string): Promise<string> {
         await Promise.all([this.#db_ready]);
+        //console.log("here in sendSql: " + sql);
         return new Promise<string>((resolve, reject) => {
             let command = "sqlite3 " + this.#db_name + " '" + sql + "'";
             //console.log(command);
@@ -101,19 +97,19 @@ class DatabaseService {
 
 
 
-async function testData() {
-    let result: string;
-    result = await dbs.sendSql('delete from test1;');
-    result = await dbs.sendSql('insert into test1 values ("first");');
-    result = await dbs.sendSql('insert into test1 values ("second");');
-    result = await dbs.sendSql('insert into test1 values ("third");');
-    result = await dbs.sendSql('select * from test1;');
-    if (result != null) {
-        console.log(result);
-    }
+// async function testData() {
+//     let result: string;
+//     result = await dbs.sendSql('delete from test1;');
+//     result = await dbs.sendSql('insert into test1 values ("first");');
+//     result = await dbs.sendSql('insert into test1 values ("second");');
+//     result = await dbs.sendSql('insert into test1 values ("third");');
+//     result = await dbs.sendSql('select * from test1;');
+//     if (result != null) {
+//         console.log(result);
+//     }
     
-}
+// }
 
 
-let dbs = new DatabaseService("myDatabaseName.db");
-testData();
+// let dbs = new DatabaseService("myDatabaseName.db");
+// testData();
