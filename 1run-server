@@ -1,2 +1,0 @@
-#!/bin/bash
-/usr/bin/node /home/david/local/dev/stock-api/build/server.js $@
