@@ -1,10 +1,3 @@
-
-Create an update function in control to update a price.
-Update the server.ts to get the price from the database.
-Create a remove function in control.ts to remove a price.
-Create a list function in control.ts to list all prices.
-Create a status function in control.ts.
-Create a start and stop function in control.ts to start and stop the server.
 Create a timing mechanism to update all prices at random time intervals.
 Set up the timed updates (maybe as a cron service or just within the program).
 Move onto VM. 

@@ -1,2 +1,2 @@
 #!/bin/bash
-/usr/bin/node /home/david/local/dev/stock-api/build/control.js $@
+/usr/bin/node /home/david/local/dev/stock-api/build/main.js $@

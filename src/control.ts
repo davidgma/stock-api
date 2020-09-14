@@ -1,83 +1,112 @@
 // Program for adding and removing prices from
 // the database.
 //import { options } from 'yargs';
-import yargs from 'yargs';
+
 import { DatabaseService } from './db-service';
 import { FtParser } from './ft-parse';
 
-interface Arguments {
-    [x: string]: unknown;
-    _: string[];
-    $0: string;
-    symbols: Array<string>;
-}
 
-class Controller {
+
+export class Controller {
     #dbs = new DatabaseService("prices.db");
     #parser = new FtParser();
 
     constructor() { }
 
-    public async AddSymbol(symbol: string) {
+    public async addSymbol(symbol: string) {
         console.log("Add symbol: " + symbol);
 
         let price = await this.#parser.getPrice(symbol);
+        //let price = 42;
 
+        await this.createTableIfNotExist();
+
+        let sql = 'delete from t_prices where symbol = "' + symbol + '";'
+        let result = await this.#dbs.sendSql(sql);
+        if (result != null) {
+            console.log(result);
+        }
+        sql = 'insert into t_prices values ("' + symbol + '", ' + price
+            + ', datetime("now","localtime")' + ');';
+        result = await this.#dbs.sendSql(sql);
+        if (result != null) {
+            console.log(result);
+        }
+    }
+
+    public async list() {
+
+        await this.createTableIfNotExist();
+        let sql = 'select * from t_prices;'
+        let result = await this.#dbs.sendSql(sql);
+        if (result != null) {
+            console.log(result);
+        }
+    }
+
+    private async createTableIfNotExist() {
         let result: string;
-        let sql = 'create table if not exists t_prices (symbol text primary key, price number);'
-        result = await this.#dbs.sendSql(sql);
-        if (result != null) {
-            console.log(result);
-        }
-        sql = 'delete from t_prices where symbol = "' + symbol + '";'
-        result = await this.#dbs.sendSql(sql);
-        if (result != null) {
-            console.log(result);
-        }
-        sql = 'insert into t_prices values ("' + symbol + '", ' + price + ');';
+        let sql = 'create table if not exists t_prices (symbol text primary key, price number,'
+            + 'last_update datetime);'
         result = await this.#dbs.sendSql(sql);
         if (result != null) {
             console.log(result);
         }
     }
-}
 
-const argv: Arguments = <Arguments>yargs
-    .command("add [symbols..]", "Add one or more symbols.", {
-        symbols: {
-            description: 'One or more symbols to add e.g. MIDD:LSE:GBX',
-            type: 'array',
-        }
-    })
-    .command("remove [symbols..]", "Remove one or more symbols.", {
-        symbols: {
-            description: 'One or more symbols to remove e.g. MIDD:LSE:GBX',
-            type: 'array',
-        }
-    })
-    .alias("add", "a")
-    .alias("remove", "r")
-    .usage('Usage: node $0 <command> [options] [symbols..]')
-    .argv;
+    public async update(symbol: string) {
+        await this.createTableIfNotExist();
+        // might want to get the current price here.
+        await this.addSymbol(symbol);
+    }
 
-
-//console.log(argv);
-async function processArgs(argv: Arguments) {
-    let ctl = new Controller();
-    if (argv._.includes("add")) {
-        for (let symbol of argv.symbols) {
-            await ctl.AddSymbol(symbol);
+    public async updateAll() {
+        await this.createTableIfNotExist();
+        let sql = 'select symbol from t_prices;'
+        let result = await this.#dbs.sendSql(sql);
+        if (result != null) {
+            let symbols = result.split('\n');
+            for (let symbol of symbols) {
+                if (symbol.length != 0) {
+                    console.log("Updating symbol:  " + symbol);
+                    await this.update(symbol);
+                }
+            }
         }
     }
-    else if (argv._.includes("remove")) {
-        console.log("Remove symbol(s): " + argv.symbols);
-    }
-    else {
-        console.log("No command given.");
-    }
-}
 
-processArgs(argv);
+    public async remove(symbol: string) {
+        console.log("Removing symbol: " + symbol);
+        await this.createTableIfNotExist();
+        let sql = 'delete from t_prices where symbol = "' + symbol
+            + '";'
+        let result = await this.#dbs.sendSql(sql);
+        if (result != null) {
+            console.log(result);
+        }
+    }
+
+    public async getPrice(symbol: string): Promise<number> {
+        await this.createTableIfNotExist();
+        let sql = 'select price from t_prices where symbol = "' + symbol + '";'
+        let result = await this.#dbs.sendSql(sql);
+        if (result != null) {
+            let prices = result.split('\n');
+            if (prices.length < 1) {
+                return 0;
+            }
+            else {
+                return Number.parseFloat(prices[0]);
+            }
+        }
+        else {
+            return 0;
+        }
+    }
+
+} // end of class controller
+
+
 
 
 

@@ -2,7 +2,10 @@
 // update them.
 import express from 'express';
 import bodyparser from 'body-parser';
-import { FtParser } from './ft-parse';
+//import { FtParser } from './ft-parse';
+import { Controller } from './control';
+
+let ctl = new Controller();
 
 // Create a new express app instance
 const app: express.Application = express();
@@ -18,18 +21,22 @@ router.get('/', function (req, res) {
 });
 app.use('/api', router);
 router.use(function (req, res, next) {
-    console.log("We've got something.");
+    //console.log("We've got something.");
     next() //calls next middleware in the application.
 });
 
+// call with http://localhost:4221/api/symbol/MIDD:LSE:GBX
 router.route('/symbol/:symbol').get((req, res) => {
-    console.log(req.params);
+    console.log("params: " + req.params);
     console.log("symbol = " + req.params.symbol);
-    let parser = new FtParser();
-    res.json(parser.getPrice(req.params.symbol));
+    ctl.getPrice(req.params.symbol).then((price) => {
+        console.log("price in route: " + price);
+        res.json(price);
+    });
+    //let parser = new FtParser();
+    //res.json(parser.getPrice(req.params.symbol));
     //res.json(15.666);
 });
-
 
 app.listen(port, function () { console.log("App is listening on port " + port + "!"); });
 

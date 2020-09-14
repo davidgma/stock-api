@@ -14,11 +14,11 @@ export class DatabaseService {
 
     constructor(db_name: string) {
         this.#db_name = db_name;
-        console.log("Database name: " + this.#db_name);
+        // console.log("Database name: " + this.#db_name);
         let dir = __dirname.split(sep);
         dir.pop();
         this.#db_directory = dir.join(sep) + sep + "data";
-        console.log("Database directory: " + this.#db_directory);
+        // console.log("Database directory: " + this.#db_directory);
         this.#db_ready = this.checkDb();
         this.dbIsReady();
     }
@@ -26,11 +26,11 @@ export class DatabaseService {
     // Check the database exists else create it.
     private async checkDb() {
         if (! await flu.isFile(this.#db_directory + sep + this.#db_name)) {
-            console.log("The database file doesn't yet exist. Creating it now...");
+            // console.log("The database file doesn't yet exist. Creating it now...");
             return await this.setupDatabase();
         }
         else {
-            console.log("The database file already exists.");
+            // console.log("The database file already exists.");
             return true;
         }
     }
@@ -62,7 +62,7 @@ export class DatabaseService {
 
     private async dbIsReady() {
         await Promise.all([this.#db_ready]);
-        console.log("The database is ready.");
+        // console.log("The database is ready.");
     }
 
     // Use double quotes "" in the sql sent and terminate with a ;.

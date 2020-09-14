@@ -12,7 +12,7 @@ chmod a+x $name1
 # Create the run script for the control program
 name2="2run-control"
 echo "#!/bin/bash" > $name2
-echo $(which node) $(pwd)/build/control.js '$@' >> $name2
+echo $(which node) $(pwd)/build/main.js '$@' >> $name2
 
 chmod a+x $name2 
 
