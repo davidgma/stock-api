@@ -1,0 +1,5 @@
+crontab -l to list current cron jobs.
+crontab -e to go into an editor to update cron jobs.
+
+#Update prices
+25 8,17 * * 1,2,3,4,5   /home/david/local/dev/stock-api/2run-control update --all

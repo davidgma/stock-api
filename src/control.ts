@@ -68,11 +68,22 @@ export class Controller {
             let symbols = result.split('\n');
             for (let symbol of symbols) {
                 if (symbol.length != 0) {
+                    await this.waitRandomTime(10);
                     console.log("Updating symbol:  " + symbol);
                     await this.update(symbol);
                 }
             }
         }
+    }
+
+    private async waitRandomTime(maximumSeconds: number) {
+        return new Promise<void>((resolve, reject) => {
+            let waitTime = (Math.floor(Math.random() * maximumSeconds) + 1);
+            console.log("Waiting " + waitTime + " seconds...");
+            setTimeout(() => {
+                resolve();
+            }, waitTime * 1000);
+        });
     }
 
     public async remove(symbol: string) {
